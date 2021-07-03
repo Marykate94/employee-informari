@@ -1,0 +1,27 @@
+{
+  "name": "employee-informari",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Marykate94/employee-informari.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Marykate94/employee-informari/issues"
+  },
+  "homepage": "https://github.com/Marykate94/employee-informari#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^8.1.1",
+    "install": "^0.13.0",
+    "mysql2": "^2.2.5",
+    "npm": "^7.19.1"
+  }
+}
