@@ -4,6 +4,7 @@ CREATE TABLE department (
     name VARCHAR(30) NOT NULL
 );
 
+-- create role table
 
 
 
