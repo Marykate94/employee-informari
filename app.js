@@ -4,6 +4,7 @@ const mysql = require("mysql2")
 const consoleTable = require('console.table');
 const dbConnect = require('./db/connection');
 const db = require("./db/connection.js");
+const Department = require("./lib/Department");
 
 // test connection
 // db.query(`SELECT * FROM employee`, (err, rows) => {
@@ -33,10 +34,13 @@ function startPrompt() {
                 "update an employee role"
             ]
         }
-    ]).then(function(selection) {
-        case "view all departments":
-            // call function for viewing all departments
-        break;
+
+      ]).then(function(getUserInput) {
+          switch(getUserInput.choice) {
+            case "Department":
+                getAllDepartments(getUserInput);
+            break;
+          }
 
         // view all roles switch case
 
@@ -49,5 +53,5 @@ function startPrompt() {
         // add an employee switch case
 
         //update an employee role switch case
-    }
-}
+      })
+    };
