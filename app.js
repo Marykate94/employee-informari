@@ -30,8 +30,24 @@ function startPrompt() {
                 "add a department",
                 "add a role",
                 "add an employee",
-                "update and employee role"
+                "update an employee role"
             ]
         }
-    ])
+    ]).then(function(selection) {
+        case "view all departments":
+            // call function for viewing all departments
+        break;
+
+        // view all roles switch case
+
+        //view all employees switch case
+
+        //add a department switch case
+
+        //add a role switch case
+
+        // add an employee switch case
+
+        //update an employee role switch case
+    }
 }
