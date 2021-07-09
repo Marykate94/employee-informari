@@ -160,21 +160,25 @@ function addRole() {
 
 function roleType() {
     var roleId = [];
-    dbConnect.query("select title from role;", function (err, res) {
+    var roleTitle = [];
+    dbConnect.query("select * from role;", function (err, res) {
         for (let i = 0; i < res.length; i++) {
-            roleId.push(res[i].title)
+            roleTitle.push(res[i].role_id);
+            roleId.push(res[i].title);
         }
     })
     return roleId;
 }
 
 function addEmployee() {
+    var managerName = [];
     var managerId = [];
     dbConnect.query("SELECT first_name, last_name FROM employee WHERE manager_id IS NULL;", function (err, res) {
         for (let i = 0; i < res.length; i++) {
-            managerId.push(res[i].first_name)
+            managerName.push(res[i].first_name);
+            managerId.push(res[i].manager_id);
         }
-        console.log(managerId);
+        console.log(managerName);
 
         inquirer.prompt([
             {
@@ -197,11 +201,11 @@ function addEmployee() {
                 name: "manager",
                 type: "list",
                 message: "Please select manager id:",
-                choices: managerId
+                choices: managerName
             }
 
         ]).then(function (response) {
-            dbConnect.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?);", [response.firstName, response.lastName, response.role, response.manager],
+            dbConnect.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?);", [response.firstName, response.lastName, response.roleTitle, response.managerName],
                 function (err, res) {
                     if (err) throw err
                     console.table(res)
