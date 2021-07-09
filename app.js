@@ -173,10 +173,10 @@ function roleType() {
 function addEmployee() {
     var managerName = [];
     var managerId = [];
-    dbConnect.query("SELECT first_name, last_name FROM employee WHERE manager_id IS NULL;", function (err, res) {
+    dbConnect.query("SELECT first_name, last_name, id FROM employee WHERE manager_id IS NULL;", function (err, res) {
         for (let i = 0; i < res.length; i++) {
             managerName.push(res[i].first_name);
-            managerId.push(res[i].manager_id);
+            managerId.push(res[i].id);
         }
         console.log(managerName);
 
@@ -205,7 +205,7 @@ function addEmployee() {
             }
 
         ]).then(function (response) {
-            dbConnect.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?);", [response.firstName, response.lastName, response.roleTitle, response.managerName],
+            dbConnect.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?);", [response.firstName, response.lastName, response.role, response.managerId],
                 function (err, res) {
                     if (err) throw err
                     console.table(res)
