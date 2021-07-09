@@ -187,13 +187,13 @@ function addEmployee() {
                 {
                     name: "role",
                     type: "list",
-                    message: "Please enter role id:",
+                    message: "Please enter role:",
                     choices: roles.map(role => role.title)
                 },
                 {
                     name: "manager",
                     type: "list",
-                    message: "Please select manager id:",
+                    message: "Please select manager:",
                     choices: managers.map(manager => manager.firstName)
                 }
 
@@ -209,4 +209,9 @@ function addEmployee() {
             })
         })
     })
+}
+
+function updateEmployee() {
+    let roles = [];
+
 }
