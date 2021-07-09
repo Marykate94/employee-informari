@@ -157,60 +157,56 @@ function addRole() {
     })
 }
 
-
-function roleType() {
-    var roleId = [];
-    var roleTitle = [];
-    dbConnect.query("select * from role;", function (err, res) {
-        for (let i = 0; i < res.length; i++) {
-            roleTitle.push(res[i].role_id);
-            roleId.push(res[i].title);
-        }
-    })
-    return roleId;
-}
-
 function addEmployee() {
-    var managerName = [];
-    var managerId = [];
-    dbConnect.query("SELECT first_name, last_name, id FROM employee WHERE manager_id IS NULL;", function (err, res) {
+    let managers = [];
+    let roles = [];
+    // var roleTitle = [];
+    dbConnect.query("select * from role;", function (err, res) {
+        // console.log({ res });
         for (let i = 0; i < res.length; i++) {
-            managerName.push(res[i].first_name);
-            managerId.push(res[i].id);
+            roles.push({ id: res[i].id, title: res[i].title });
         }
-        console.log(managerName);
 
-        inquirer.prompt([
-            {
-                name: "firstName",
-                type: "input",
-                message: "Please enter first name:"
-            },
-            {
-                name: "lastName",
-                type: "input",
-                message: "Please enter last name:"
-            },
-            {
-                name: "role",
-                type: "list",
-                message: "Please enter role id:",
-                choices: roleType()
-            },
-            {
-                name: "manager",
-                type: "list",
-                message: "Please select manager id:",
-                choices: managerName
+        dbConnect.query("SELECT first_name, last_name, id FROM employee WHERE manager_id IS NULL;", function (err, val) {
+            for (let i = 0; i < val.length; i++) {
+                managers.push({ id: val[i].id, firstName: val[i].first_name });
             }
+            console.log({managers, roles});
 
-        ]).then(function (response) {
-            dbConnect.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?);", [response.firstName, response.lastName, response.role, response.managerId],
-                function (err, res) {
-                    if (err) throw err
-                    console.table(res)
-                    startPrompt()
-                })
+            inquirer.prompt([
+                {
+                    name: "firstName",
+                    type: "input",
+                    message: "Please enter first name:"
+                },
+                {
+                    name: "lastName",
+                    type: "input",
+                    message: "Please enter last name:"
+                },
+                {
+                    name: "role",
+                    type: "list",
+                    message: "Please enter role id:",
+                    choices: roles.map(role => role.title)
+                },
+                {
+                    name: "manager",
+                    type: "list",
+                    message: "Please select manager id:",
+                    choices: managers.map(manager => manager.firstName)
+                }
+
+            ]).then(function (response) {
+                const role_id = roles.find(role => role.title === response.role).id
+                const manager_id = managers.find(manager => manager.firstName === response.manager).id
+                dbConnect.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?);", [response.firstName, response.lastName, role_id, manager_id],
+                    function (err, res) {
+                        if (err) throw err
+                        console.table(res)
+                        startPrompt()
+                    })
+            })
         })
     })
 }
