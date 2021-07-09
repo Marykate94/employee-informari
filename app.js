@@ -21,9 +21,9 @@ dbConnect.connect(function (err) {
 function startPrompt() {
     inquirer.prompt([
         {
-            // create prompts
             type: "list",
             message: "What would you like to do?",
+            name: "choice",
             choices: [
                 "view all departments",
                 "view all roles",
@@ -33,8 +33,7 @@ function startPrompt() {
                 "add an employee",
                 "update an employee role",
                 "exit"
-            ],
-            name: "choice",
+            ]
         }
 
     ]).then(function (getUserInput) {
@@ -122,38 +121,54 @@ function addDepartment() {
 
 function addRole() {
     var dpId = []
-    dbConnect.query("select id from department;",function(err,res){
-       console.log(res)
-       for (let i = 0; i< res.length; i++) {
-           dpId.push(res[i].id)
-       }
-       console.log(dpId);
-       
-    
-       inquirer.prompt([
-         {
-             type: "input",
-             name: "title",
-             message: "What is the job title?"
-         },
-     {
-             type: "input",
-            name: "salary",
-         message: "What is the salary?"
-        },
-        {
-            type: "list",
-            name: "departmentId",
-            message: "Please select department ID",
-            choices: dpId
+    dbConnect.query("select id from department;", function (err, res) {
+        console.log(res)
+        for (let i = 0; i < res.length; i++) {
+            dpId.push(res[i].id)
         }
-    ]).then(function (response) {
-        dbConnect.query("INSERT INTO role (title, salary, department_id) VALUES (?,?,?);", [response.title,response.salary,response.departmentId],
-            function (err, res) {
-                if (err) throw err
-                console.table(res)
-                startPrompt()
-            })
+        console.log(dpId);
+
+
+        inquirer.prompt([
+            {
+                type: "input",
+                name: "title",
+                message: "What is the job title?"
+            },
+            {
+                type: "input",
+                name: "salary",
+                message: "What is the salary?"
+            },
+            {
+                type: "list",
+                name: "departmentId",
+                message: "Please select department ID",
+                choices: dpId
+            }
+        ]).then(function (response) {
+            dbConnect.query("INSERT INTO role (title, salary, department_id) VALUES (?,?,?);", [response.title, response.salary, response.departmentId],
+                function (err, res) {
+                    if (err) throw err
+                    console.table(res)
+                    startPrompt()
+                })
+        })
     })
-})
+}
+
+var roleId = [];
+function roleType() {
+    dbConnect.query("SELECT * FROM role", function(err, res) {
+        for (let i = 0; i < res.length; i++) {
+            roleId.push(res[i].title)
+        }
+    })
+    return roleId;
+}
+
+function addEmployee() {
+    // var managerId = [];
+    // dbConnect.query("select id from manager")
+    
 }
