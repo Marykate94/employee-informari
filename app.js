@@ -159,7 +159,7 @@ function addRole() {
 
 var roleId = [];
 function roleType() {
-    dbConnect.query("SELECT * FROM role", function(err, res) {
+    dbConnect.query("select title from role;", function (err, res) {
         for (let i = 0; i < res.length; i++) {
             roleId.push(res[i].title)
         }
@@ -168,7 +168,44 @@ function roleType() {
 }
 
 function addEmployee() {
-    // var managerId = [];
-    // dbConnect.query("select id from manager")
-    
+    var managerId = [];
+    dbConnect.query("SELECT first_name, last_name FROM employee WHERE manager_id IS NULL;", function (err, res) {
+        for (let i = 0; i < res.length; i++) {
+            managerId.push(res[i].first_name)
+        }
+        console.log(managerId);
+
+        inquirer.prompt([
+            {
+                name: "firstName",
+                type: "input",
+                message: "Please enter first name:"
+            },
+            {
+                name: "lastName",
+                type: "input",
+                message: "Please enter last name:"
+            },
+            {
+                name: "role",
+                type: "list",
+                message: "Please enter role:",
+                choices: roleType()
+            },
+            {
+                name: "manager",
+                type: "list",
+                message: "Please select manager:",
+                choices: managerId
+            }
+
+        ]).then(function (response) {
+            dbConnect.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?);", [response.firstName, response.lastName, response.role, response.manager],
+                function (err, res) {
+                    if (err) throw err
+                    console.table(res)
+                    startPrompt()
+                })
+        })
+    })
 }
