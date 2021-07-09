@@ -3,16 +3,17 @@ const inquirer = require("inquirer")
 const mysql = require("mysql2")
 const consoleTable = require('console.table');
 const dbConnect = require('./db/connection');
-const db = require("./db/connection.js");
-const Department = require("./lib/Department");
+const db = require("./db/connection");
+// const db = require("./db/connection.js");
+// const Department = require("./lib/Department");
 
 // test connection
 // db.query(`SELECT * FROM employee`, (err, rows) => {
 //     console.log(rows);
 // });
 // initiate prompt when connection made 
-dbConnect.connect(function(err) {
-    if (err) throw err 
+dbConnect.connect(function (err) {
+    if (err) throw err
     console.log("successfully connected")
     startPrompt();
 });
@@ -23,7 +24,6 @@ function startPrompt() {
             // create prompts
             type: "list",
             message: "What would you like to do?",
-            name: "choice",
             choices: [
                 "view all departments",
                 "view all roles",
@@ -31,20 +31,40 @@ function startPrompt() {
                 "add a department",
                 "add a role",
                 "add an employee",
-                "update an employee role"
-            ]
+                "update an employee role",
+                "exit"
+            ],
+            name: "choice",
         }
 
-      ]).then(function(getUserInput) {
-          switch(getUserInput.choice) {
-            case "Department":
+    ]).then(function (getUserInput) {
+        switch (getUserInput.choice) {
+            case "view all departments":
                 getAllDepartments(getUserInput);
-            break;
-          }
-
-        // view all roles switch case
-
-        //view all employees switch case
+                break;
+            case "view all roles":
+                getAllRoles(getUserInput);
+                break;
+            case "view all employees":
+                getAllEmployees(getUserInput);
+                break;
+            case "add a department":
+                addDepartment(getUserInput);
+                break;
+            case "add a role":
+                addRole(getUserInput);
+                break;
+            case "add an employee":
+                addEmployee(getUserInput);
+                break;
+            case "update an employee role":
+                updateEmployeeRole(getUserInput);
+                break;
+            // default:
+            //     dbConnect.end()
+            //     process.exit(0)
+            //     break;
+        }
 
         //add a department switch case
 
@@ -53,5 +73,87 @@ function startPrompt() {
         // add an employee switch case
 
         //update an employee role switch case
-      })
-    };
+    })
+};
+
+function getAllDepartments() {
+    dbConnect.query("SELECT * FROM department;",
+        function (err, res) {
+            if (err) throw err
+            console.table(res)
+            startPrompt()
+        })
+}
+
+function getAllRoles() {
+    dbConnect.query("SELECT * FROM role;",
+        function (err, res) {
+            if (err) throw err
+            console.table(res)
+            startPrompt()
+        })
+}
+
+function getAllEmployees() {
+    dbConnect.query("SELECT * FROM employee;",
+        function (err, res) {
+            if (err) throw err
+            console.table(res)
+            startPrompt()
+        })
+}
+
+function addDepartment() {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "departmentName",
+            message: "What is the department name?"
+        }
+    ]).then(function (response) {
+        dbConnect.query("INSERT INTO department (name) VALUES(?);", response.departmentName,
+            function (err, res) {
+                if (err) throw err
+                console.table(res)
+                startPrompt()
+            })
+    })
+}
+
+function addRole() {
+    var dpId = []
+    dbConnect.query("select id from department;",function(err,res){
+       console.log(res)
+       for (let i = 0; i< res.length; i++) {
+           dpId.push(res[i].id)
+       }
+       console.log(dpId);
+       
+    
+       inquirer.prompt([
+         {
+             type: "input",
+             name: "title",
+             message: "What is the job title?"
+         },
+     {
+             type: "input",
+            name: "salary",
+         message: "What is the salary?"
+        },
+        {
+            type: "list",
+            name: "departmentId",
+            message: "Please select department ID",
+            choices: dpId
+        }
+    ]).then(function (response) {
+        dbConnect.query("INSERT INTO role (title, salary, department_id) VALUES (?,?,?);", [response.title,response.salary,response.departmentId],
+            function (err, res) {
+                if (err) throw err
+                console.table(res)
+                startPrompt()
+            })
+    })
+})
+}
