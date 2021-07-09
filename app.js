@@ -157,8 +157,9 @@ function addRole() {
     })
 }
 
-var roleId = [];
+
 function roleType() {
+    var roleId = [];
     dbConnect.query("select title from role;", function (err, res) {
         for (let i = 0; i < res.length; i++) {
             roleId.push(res[i].title)
@@ -189,13 +190,13 @@ function addEmployee() {
             {
                 name: "role",
                 type: "list",
-                message: "Please enter role:",
+                message: "Please enter role id:",
                 choices: roleType()
             },
             {
                 name: "manager",
                 type: "list",
-                message: "Please select manager:",
+                message: "Please select manager id:",
                 choices: managerId
             }
 
