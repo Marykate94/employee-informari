@@ -250,7 +250,7 @@ function updateEmployee() {
                 function (err, res) {
                     if (err) throw err
                     console.table(res)
-                    startPrompt()
+                    getAllEmployees()
                 }
                 )
                
