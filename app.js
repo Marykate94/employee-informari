@@ -57,7 +57,7 @@ function startPrompt() {
                 addEmployee(getUserInput);
                 break;
             case "update an employee role":
-                updateEmployeeRole(getUserInput);
+                updateEmployee(getUserInput);
                 break;
             // default:
             //     dbConnect.end()
@@ -171,7 +171,7 @@ function addEmployee() {
             for (let i = 0; i < val.length; i++) {
                 managers.push({ id: val[i].id, firstName: val[i].first_name });
             }
-            console.log({managers, roles});
+            console.log({ managers, roles });
 
             inquirer.prompt([
                 {
@@ -212,6 +212,41 @@ function addEmployee() {
 }
 
 function updateEmployee() {
+    let employees = [];
     let roles = [];
+    dbConnect.query("SELECT * FROM employee;", function (err, res) {
+        // console.table(res)
+        for (let i = 0; i < res.length; i++) {
+            employees.push({ id: res[i].id, first_name: res[i].first_name });
+        }
+        console.log(employees)
 
+       
+        dbConnect.query("SELECT * FROM role;", function (err, input) {
+            for (let i = 0; i < input.length; i++) {
+                roles.push({ id: input[i].id, title: input[i].title });
+            }
+            console.log(roles);
+            inquirer.prompt([
+                {
+                    name: "lastName",
+                    type: "list",
+                    message: "Please choose employee first name:",
+                    choices: employees.map(employee => employee.first_name)
+                },
+                {
+                    name: "role",
+                    type: "list",
+                    message: "Please enter new role:",
+                    choices: roles.map(role => role.title)
+                }
+            ]).then(function (response) {
+                // const role_id = roles.find(role => role.title === response.role).id
+                console.log(response)
+
+            })
+        }
+
+        )}
+    )
 }
