@@ -59,19 +59,11 @@ function startPrompt() {
             case "update an employee role":
                 updateEmployee(getUserInput);
                 break;
-            // default:
-            //     dbConnect.end()
-            //     process.exit(0)
-            //     break;
+             case "exit":
+                 dbConnect.end()
+                 console.log("Goodbye!");
+                 process.exit(0)
         }
-
-        //add a department switch case
-
-        //add a role switch case
-
-        // add an employee switch case
-
-        //update an employee role switch case
     })
 };
 
