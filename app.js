@@ -241,16 +241,19 @@ function updateEmployee() {
                     choices: roles.map(role => role.title)
                 }
             ]).then(function (response) {
-                const employee_id = employees.find(employee => employee.first_name).id
+                console.log(response)
+                const employee_id = employees.find(employee => employee.first_name === response.firstName).id
                 const role_id = roles.find(role => role.title === response.role).id
-                dbConnect.query("UPDATE employee SET role_id WHERE employee_id;"),
+                console.log(employee_id)
+                console.log(role_id)
+                dbConnect.query("UPDATE employee SET role_id = ? WHERE id = ?;", [role_id, employee_id],
                 function (err, res) {
                     if (err) throw err
                     console.table(res)
                     startPrompt()
                 }
-                console.log(response)
-
+                )
+               
             })
         }
 
