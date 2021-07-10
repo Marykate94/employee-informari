@@ -229,7 +229,7 @@ function updateEmployee() {
             console.log(roles);
             inquirer.prompt([
                 {
-                    name: "lastName",
+                    name: "firstName",
                     type: "list",
                     message: "Please choose employee first name:",
                     choices: employees.map(employee => employee.first_name)
@@ -241,7 +241,14 @@ function updateEmployee() {
                     choices: roles.map(role => role.title)
                 }
             ]).then(function (response) {
-                // const role_id = roles.find(role => role.title === response.role).id
+                const employee_id = employees.find(employee => employee.first_name).id
+                const role_id = roles.find(role => role.title === response.role).id
+                dbConnect.query("UPDATE employee SET role_id WHERE employee_id;"),
+                function (err, res) {
+                    if (err) throw err
+                    console.table(res)
+                    startPrompt()
+                }
                 console.log(response)
 
             })
