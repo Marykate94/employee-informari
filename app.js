@@ -108,7 +108,7 @@ function addDepartment() {
 function addRole() {
     var dpId = []
     dbConnect.query("select id from department;", function (err, res) {
-        console.log(res)
+        // console.log(res)
         for (let i = 0; i < res.length; i++) {
             dpId.push(res[i].id)
         }
