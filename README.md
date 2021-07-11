@@ -21,6 +21,9 @@
   
   Please see video link for Employee-Informari tutorial: https://drive.google.com/file/d/1KV7L17kIrYUxunVXFnKWdLHk6kga6E0b/view
 
+  
+  <img width="988" alt="Screen Shot 2021-07-11 at 6 06 10 PM" src="https://user-images.githubusercontent.com/79379903/125211182-ad811880-e272-11eb-8f3b-fe926fd8202b.png">
+
   ## License
   N/A
 
