@@ -4,13 +4,7 @@ const mysql = require("mysql2")
 const consoleTable = require('console.table');
 const dbConnect = require('./db/connection');
 const db = require("./db/connection");
-// const db = require("./db/connection.js");
-// const Department = require("./lib/Department");
 
-// test connection
-// db.query(`SELECT * FROM employee`, (err, rows) => {
-//     console.log(rows);
-// });
 // initiate prompt when connection made 
 dbConnect.connect(function (err) {
     if (err) throw err
@@ -118,7 +112,6 @@ function addRole() {
         for (let i = 0; i < res.length; i++) {
             dpId.push(res[i].id)
         }
-        console.log(dpId);
 
 
         inquirer.prompt([
@@ -163,7 +156,6 @@ function addEmployee() {
             for (let i = 0; i < val.length; i++) {
                 managers.push({ id: val[i].id, firstName: val[i].first_name });
             }
-            console.log({ managers, roles });
 
             inquirer.prompt([
                 {
@@ -211,14 +203,12 @@ function updateEmployee() {
         for (let i = 0; i < res.length; i++) {
             employees.push({ id: res[i].id, first_name: res[i].first_name });
         }
-        console.log(employees)
 
        
         dbConnect.query("SELECT * FROM role;", function (err, input) {
             for (let i = 0; i < input.length; i++) {
                 roles.push({ id: input[i].id, title: input[i].title });
             }
-            console.log(roles);
             inquirer.prompt([
                 {
                     name: "firstName",
@@ -233,11 +223,8 @@ function updateEmployee() {
                     choices: roles.map(role => role.title)
                 }
             ]).then(function (response) {
-                console.log(response)
                 const employee_id = employees.find(employee => employee.first_name === response.firstName).id
                 const role_id = roles.find(role => role.title === response.role).id
-                console.log(employee_id)
-                console.log(role_id)
                 dbConnect.query("UPDATE employee SET role_id = ? WHERE id = ?;", [role_id, employee_id],
                 function (err, res) {
                     if (err) throw err
